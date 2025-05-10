@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dziękuję za wiadomość - Filip Pira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; 
+            color: #e2e8f0; 
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #2dd4bf, #38bdf8, #818cf8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; text-fill-color: transparent;
+        }
+        .confirmation-box {
+            background-color: rgba(30, 41, 59, 0.7); /* slate-800 with opacity */
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(51, 65, 85, 0.8); /* slate-700 with opacity */
+            padding: 3rem 2rem;
+            border-radius: 1.5rem; /* rounded-3xl */
+            max-width: 600px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .home-button {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .home-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(45, 212, 191, 0.4);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="confirmation-box p-8 sm:p-12">
+        <i class="fas fa-check-circle text-7xl sm:text-8xl text-green-400 mb-8"></i>
+        <h1 class="text-3xl sm:text-4xl md:text-5xl font-black gradient-text mb-6">
+            Dziękuję!
+        </h1>
+        <p class="text-xl sm:text-2xl text-slate-300 mb-10 leading-relaxed">
+            Twoja wiadomość została pomyślnie wysłana. Skontaktuję się z Tobą najszybciej jak to możliwe.
+        </p>
+        <a href="index.html" class="home-button inline-flex items-center bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold py-3 px-8 rounded-xl text-lg shadow-xl">
+            <i class="fas fa-home mr-3"></i> Wróć na stronę główną
+        </a>
+    </div>
+
+    <footer class="absolute bottom-8 text-center text-slate-600 text-sm">
+        &copy; <span id="currentYearConfirm"></span> Filip Pira
+    </footer>
+
+    <script>
+        document.getElementById('currentYearConfirm').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

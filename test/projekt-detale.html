@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szczegóły Projektu | Filip Pira</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css" rel="stylesheet" />
+
+    <style>
+        /* Style importowane z index.html dla spójności */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1a202c; }
+        ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2dd4bf; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; 
+            color: #e2e8f0; 
+            overflow-x: hidden;
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #2dd4bf, #38bdf8, #818cf8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; text-fill-color: transparent;
+        }
+        .project-detail-card {
+            background-color: rgba(30, 41, 59, 0.6); 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(51, 65, 85, 0.7); 
+        }
+        .back-button {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .back-button:hover {
+            transform: translateX(-5px) scale(1.05);
+            box-shadow: 0 5px 15px rgba(45, 212, 191, 0.3);
+        }
+        .gallery-image {
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+        .gallery-image:hover {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+         .shadow-3xl { box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3), 0 18px 36px -18px rgba(0, 0, 0, 0.33); }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html#projects" class="back-button inline-flex items-center text-lg text-cyan-400 hover:text-cyan-300 font-semibold py-2 px-4 rounded-lg border-2 border-transparent hover:border-cyan-500/70">
+                    <i class="fas fa-arrow-left mr-3"></i> Wróć do Portfolio
+                </a>
+                <div id="project-nav-title" class="text-xl font-bold text-slate-300 hidden md:block truncate max-w-md">
+                    
+                </div>
+                <a href="index.html#contact" class="text-slate-300 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-semibold transition-colors duration-300 tracking-wider">
+                    KONTAKT
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+        
+        <header class="text-center mb-16 sm:mb-20" data-aos="fade-down">
+            <h1 id="project-title" class="text-4xl sm:text-5xl md:text-6xl font-black gradient-text mb-6">
+                Ładowanie nazwy projektu...
+            </h1>
+            <p id="project-subtitle" class="text-xl sm:text-2xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
+                
+            </p>
+        </header>
+
+        <section class="mb-16 sm:mb-20" data-aos="zoom-in-up">
+            <img id="project-hero-image" src="https://placehold.co/1200x600/0F172A/2DD4BF?text=Obraz+Projektu&font=Inter" alt="Główny obraz projektu" class="w-full rounded-2xl shadow-3xl object-cover max-h-[500px]">
+        </section>
+
+        <section class="grid md:grid-cols-3 gap-12 mb-16 sm:mb-20">
+            <div class="md:col-span-2 project-detail-card p-8 rounded-xl" data-aos="fade-right">
+                <h2 class="text-3xl font-bold text-cyan-400 mb-6">O Projekcie</h2>
+                <div id="project-description" class="text-slate-300 space-y-5 text-lg leading-relaxed">
+                    <p>Ładowanie opisu projektu...</p>
+                </div>
+            </div>
+            <aside class="md:col-span-1 space-y-8">
+                <div class="project-detail-card p-8 rounded-xl" data-aos="fade-left" data-aos-delay="100">
+                    <h3 class="text-2xl font-semibold text-teal-400 mb-4"><i class="fas fa-cogs mr-2"></i> Użyte Technologie / Kluczowe Obszary</h3>
+                    <div id="project-technologies" class="flex flex-wrap gap-3">
+                        
+                    </div>
+                </div>
+                <div class="project-detail-card p-8 rounded-xl" data-aos="fade-left" data-aos-delay="200">
+                    <h3 class="text-2xl font-semibold text-sky-400 mb-4"><i class="fas fa-user-tie mr-2"></i> Moja Rola</h3>
+                    <p id="project-role" class="text-slate-300 text-lg"></p>
+                </div>
+                <div id="project-links-container" class="project-detail-card p-8 rounded-xl" data-aos="fade-left" data-aos-delay="300" style="display: none;"> {/* Ukryte domyślnie */}
+                    <h3 class="text-2xl font-semibold text-indigo-400 mb-4"><i class="fas fa-link mr-2"></i> Linki Projektu</h3>
+                    <div id="project-links" class="space-y-3">
+                        
+                    </div>
+                </div>
+            </aside>
+        </section>
+
+        <section id="project-gallery-section" class="mb-16 sm:mb-20" style="display: none;"> {/* Ukryte domyślnie */}
+            <h2 class="text-3xl font-bold text-center text-cyan-400 mb-10" data-aos="fade-up">Galeria Projektu</h2>
+            <div id="project-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                
+            </div>
+        </section>
+
+        <section id="project-challenges-section" class="mb-16 sm:mb-20 project-detail-card p-8 sm:p-10 rounded-xl" data-aos="fade-up" style="display: none;"> {/* Ukryte domyślnie */}
+            <h2 class="text-3xl font-bold text-cyan-400 mb-6">Wyzwania i Rozwiązania</h2>
+            <div id="project-challenges" class="text-slate-300 space-y-5 text-lg leading-relaxed">
+                
+            </div>
+        </section>
+        
+        <section class="text-center pt-10 border-t border-slate-700/50" data-aos="fade-up">
+             <h3 class="text-2xl font-semibold text-slate-300 mb-6">Nawigacja:</h3>
+             <div class="flex justify-center gap-6">
+                <a href="index.html#projects" class="text-cyan-400 hover:text-cyan-300 font-semibold text-lg border-b-2 border-transparent hover:border-cyan-400 transition-all pb-1">Wszystkie Projekty</a>
+             </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-16 bg-slate-900 text-slate-500 mt-24 sm:mt-32 border-t-2 border-slate-700/50">
+        <p class="mb-2 text-base">&copy; <span id="currentYear"></span> Filip Pira.</p>
+        <a href="index.html" class="text-cyan-500 hover:text-cyan-300">Wróć do strony głównej</a>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
+
+    <script>
+        // Inicjalizacja AOS (Animate On Scroll)
+        AOS.init({ duration: 900, once: true, offset: 50 });
+        
+        // Ustawienie aktualnego roku w stopce
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Dane projektów (w rzeczywistej aplikacji pobierane np. z JSON lub CMS)
+        // Upewnij się, że ten obiekt jest wypełniony Twoimi danymi projektowymi
+        const projectsData = {
+            "vodeno-baas": {
+                title: "Projekty BaaS i Regulacyjne w Vodeno",
+                subtitle: "Wsparcie kluczowych projektów dla strategicznych klientów w obszarze Banking as a Service, programów regulacyjnych i naprawczych.",
+                heroImage: "https://placehold.co/1200x600/0F172A/2DD4BF?text=Vodeno+Projekty&font=Inter&bold",
+                description: `
+                    <p>W Vodeno byłem zaangażowany w dynamiczne i złożone projekty dla czołowych klientów, takich jak Aion Bank, Credex czy InPost. Moja rola obejmowała wsparcie w obszarze Banking as a Service (BaaS), co wiązało się z integracją nowoczesnych rozwiązań finansowych.</p>
+                    <p>Kluczowym aspektem mojej pracy była również obsługa programów regulacyjnych i naprawczych, wymagających ścisłej współpracy z zewnętrznymi audytorami, w tym KPMG. Działałem w hybrydowych rolach, dostosowując się do potrzeb projektu jako Project Manager przy krótkoterminowych inicjatywach, PM Support, Business Analyst czy Account Manager.</p>
+                    <p>Do moich obowiązków należało prowadzenie spotkań statusowych, efektywna komunikacja z zespołami projektowymi i interesariuszami, przygotowywanie prezentacji i raportów dla zarządu, zbieranie wymagań, tworzenie dokumentacji (Google Workspace, Developerhub, Confluence) oraz raportów budżetowych. Pracowałem w metodyce Scrumban, wykorzystując narzędzia AI do optymalizacji codziennych zadań.</p>
+                `,
+                technologies: ["Project Management", "PMO Support", "Analiza Biznesowa", "BaaS", "FinTech", "Regulacje Finansowe", "Scrumban", "Komunikacja", "Raportowanie", "Google Workspace", "Confluence", "Jira"],
+                role: "IT PM Support (Project Manager, Business Analyst, Account Manager)",
+                gallery: [
+                    { thumb: "https://placehold.co/800x600/0F172A/2DD4BF?text=Spotkanie+Zespo%C5%82u&font=Inter", full: "https://placehold.co/1200x900/0F172A/2DD4BF?text=Spotkanie+Zespo%C5%82u+Full", title: "Efektywna współpraca zespołowa" },
+                    { thumb: "https://placehold.co/800x600/0F172A/38BDF8?text=Raport+Regulacyjny&font=Inter", full: "https://placehold.co/1200x900/0F172A/38BDF8?text=Raport+Regulacyjny+Full", title: "Przygotowanie dokumentacji regulacyjnej" },
+                    { thumb: "https://placehold.co/800x600/0F172A/818CF8?text=Dashboard+PMO&font=Inter", full: "https://placehold.co/1200x900/0F172A/818CF8?text=Dashboard+PMO+Full", title: "Monitorowanie postępów projektu" }
+                ],
+                challenges: `
+                    <div>
+                        <h4 class="text-xl font-semibold text-teal-400 mb-2">Złożoność Regulacyjna:</h4>
+                        <p>Nawigowanie w skomplikowanym środowisku regulacji finansowych i zapewnienie zgodności projektów. Kluczowa była dokładna analiza i współpraca z ekspertami prawnymi oraz audytorami.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold text-teal-400 mb-2">Dynamiczne Wymagania Klientów:</h4>
+                        <p>Szybkie dostosowywanie się do zmieniających się potrzeb strategicznych klientów w dynamicznie rozwijającym się sektorze BaaS. Wymagało to elastyczności i proaktywnej komunikacji.</p>
+                    </div>
+                `
+            },
+            "targetpro-raporty": {
+                title: "Automatyzacja Raportowania w TargetPro",
+                subtitle: "Optymalizacja i automatyzacja procesów raportowania sprzedaży, co skróciło czas przygotowywania raportów o 90%.",
+                heroImage: "https://placehold.co/1200x600/0F172A/67E8F9?text=TargetPro+Automatyzacja&font=Inter&bold",
+                description: `
+                    <p>Jako Sales Analyst w TargetPro, moim głównym celem była optymalizacja procesów związanych z raportowaniem sprzedaży. Skupiłem się na automatyzacji przygotowywania ogólnopolskich raportów, co pozwoliło na skrócenie czasu potrzebnego na te zadania aż o 90%.</p>
+                    <p>Wykorzystałem do tego narzędzia takie jak VBA w Excelu, Power Query do transformacji danych oraz Power Automate do orkiestracji przepływów pracy. Oprócz regularnych raportów, zajmowałem się zbieraniem wymagań i tworzeniem raportów ad hoc, administracją bazą danych oraz zadaniami z kategorii ETL.</p>
+                    <p>Ważnym elementem była również współpraca z menadżerami sprzedaży i działem IT, a także wsparcie techniczne dla przedstawicieli handlowych w zakresie obsługi aplikacji mobilnej. Pracowałem w filozofii Agile, co pozwoliło na elastyczne zarządzanie zadaniami i szybkie dostarczanie wartości.</p>
+                `,
+                technologies: ["Analiza Sprzedaży", "Automatyzacja Procesów", "VBA", "Power Query", "Power Automate", "ETL", "Administracja Baz Danych", "Raportowanie Ad Hoc", "Agile"],
+                role: "Sales Analyst",
+                gallery: [
+                     { thumb: "https://placehold.co/800x600/0F172A/67E8F9?text=Dashboard+Sprzeda%C5%BCy&font=Inter", full: "https://placehold.co/1200x900/0F172A/67E8F9?text=Dashboard+Sprzeda%C5%BCy+Full", title: "Zautomatyzowany dashboard sprzedaży" },
+                    { thumb: "https://placehold.co/800x600/0F172A/2DD4BF?text=Schemat+Automatyzacji&font=Inter", full: "https://placehold.co/1200x900/0F172A/2DD4BF?text=Schemat+Automatyzacji+Full", title: "Przepływ zautomatyzowanego procesu" }
+                ],
+                challenges: `
+                    <div>
+                        <h4 class="text-xl font-semibold text-teal-400 mb-2">Integracja Różnych Źródeł Danych:</h4>
+                        <p>Połączenie danych sprzedażowych z wielu systemów w spójne i wiarygodne raporty. Kluczowe było zastosowanie Power Query do efektywnego czyszczenia i transformacji danych.</p>
+                    </div>
+                     <div>
+                        <h4 class="text-xl font-semibold text-teal-400 mb-2">Adopcja Nowych Narzędzi Przez Użytkowników:</h4>
+                        <p>Przekonanie menadżerów do korzyści płynących z automatyzacji i wsparcie ich w korzystaniu z nowych, zautomatyzowanych raportów. Ważne było przygotowanie klarownych instrukcji i demonstracji.</p>
+                    </div>
+                `
+            },
+             "gabi-szkolenia": {
+                title: "Rozwój Procesów Szkoleniowych w Gabi",
+                subtitle: "Budowa i rozwój kompleksowego procesu szkoleniowego i operacyjnego w startupie Gabi Polska, wspierającego wzrost zespołu z 20 do 200 osób.",
+                heroImage: "https://placehold.co/1200x600/0F172A/818CF8?text=Gabi+Procesy&font=Inter&bold",
+                description: `
+                    <p>Podczas mojej pracy w Gabi Personal Insurance Agency, startupie technologicznym z Doliny Krzemowej, odgrywałem kluczową rolę w budowie i rozwoju polskiego oddziału operacyjnego. Moje działania koncentrowały się na stworzeniu od podstaw efektywnego procesu szkoleniowego i operacyjnego.</p>
+                    <p>Byłem odpowiedzialny za tworzenie i zarządzanie kompleksową dokumentacją, w tym instrukcjami, procedurami i wytycznymi. Przeprowadziłem około 100 szkoleń wdrożeniowych dla nowych pracowników, wspierając dynamiczny wzrost zespołu z 20 do 200 osób. Opracowałem również wewnętrzny proces certyfikacji.</p>
+                    <p>Moja rola była elastyczna, łącząc obowiązki Analityka Biznesowo-Systemowego, Team Leadera, a nawet Product Managera w kontekście narzędzi wewnętrznych. Zajmowałem się zbieraniem wymagań biznesowych i systemowych, rekomendowaniem i wdrażaniem rozwiązań mających na celu poprawę jakości i efektywności. W późniejszym etapie pracowałem nad rozwojem wewnętrznego systemu szkoleniowego i audytowego, w tym reorganizacją podejścia na 100% zdalne.</p>
+                `,
+                technologies: ["Procesy Szkoleniowe", "Zarządzanie Wiedzą", "Onboarding", "Tworzenie Dokumentacji", "Audyt Jakości", "Rozwój Zespołu", "Metodyki Zwinne", "Startup Operations"],
+                role: "Quality Assurance Analyst (Analityk, Team Leader, Trener)",
+                gallery: [
+                     { thumb: "https://placehold.co/800x600/0F172A/818CF8?text=Warsztaty+Szkoleniowe&font=Inter", full: "https://placehold.co/1200x900/0F172A/818CF8?text=Warsztaty+Szkoleniowe+Full", title: "Prowadzenie warsztatów dla nowego zespołu" },
+                    { thumb: "https://placehold.co/800x600/0F172A/2DD4BF?text=Dokumentacja+Procesowa&font=Inter", full: "https://placehold.co/1200x900/0F172A/2DD4BF?text=Dokumentacja+Procesowa+Full", title: "Fragment dokumentacji szkoleniowej" }
+                ],
+                challenges: `
+                    <div>
+                        <h4 class="text-xl font-semibold text-teal-400 mb-2">Szybki Wzrost Zespołu:</h4>
+                        <p>Zapewnienie spójnego i wysokiej jakości onboardingu oraz szkolenia dla dynamicznie rosnącej liczby pracowników. Wymagało to stworzenia skalowalnych materiałów i procesów.</p>
+                    </div>
+                     <div>
+                        <h4 class="text-xl font-semibold text-teal-400 mb-2">Przejście na Pracę Zdalną:</h4>
+                        <p>Reorganizacja całego procesu szkoleniowego i audytowego, aby efektywnie funkcjonował w modelu 100% zdalnym, przy jednoczesnym utrzymaniu zaangażowania i jakości.</p>
+                    </div>
+                `
+            }
+            // Dodaj tutaj dane dla innych projektów, jeśli są potrzebne
+        };
+
+        // Funkcja do ładowania danych projektu na podstawie parametru URL
+        function loadProjectData() {
+            const params = new URLSearchParams(window.location.search);
+            const projectId = params.get('id');
+            const project = projectsData[projectId];
+
+            // Pobieranie referencji do elementów DOM
+            const titleEl = document.getElementById('project-title');
+            const navTitleEl = document.getElementById('project-nav-title');
+            const subtitleEl = document.getElementById('project-subtitle');
+            const heroImageEl = document.getElementById('project-hero-image');
+            const descriptionEl = document.getElementById('project-description');
+            const techContainer = document.getElementById('project-technologies');
+            const roleEl = document.getElementById('project-role');
+            const linksContainerParent = document.getElementById('project-links-container');
+            const linksContainer = document.getElementById('project-links');
+            const gallerySection = document.getElementById('project-gallery-section');
+            const galleryContainer = document.getElementById('project-gallery');
+            const challengesSection = document.getElementById('project-challenges-section');
+            const challengesEl = document.getElementById('project-challenges');
+
+            if (project) {
+                // Ustawianie treści dynamicznie
+                document.title = `Projekt - ${project.title} | Filip Pira`;
+                titleEl.textContent = project.title;
+                navTitleEl.textContent = project.title;
+                subtitleEl.textContent = project.subtitle;
+                heroImageEl.src = project.heroImage;
+                heroImageEl.alt = `Główny obraz projektu ${project.title}`;
+                descriptionEl.innerHTML = project.description;
+                
+                techContainer.innerHTML = ''; // Wyczyść istniejące tagi
+                project.technologies.forEach(tech => {
+                    const span = document.createElement('span');
+                    span.className = 'skill-tag bg-cyan-600/40 text-cyan-200 px-4 py-2 rounded-lg text-sm font-semibold';
+                    span.textContent = tech;
+                    techContainer.appendChild(span);
+                });
+
+                roleEl.textContent = project.role;
+
+                // Linki projektu
+                if (project.links && (project.links.live || project.links.source)) {
+                    linksContainerParent.style.display = 'block';
+                    linksContainer.innerHTML = ''; // Wyczyść istniejące linki
+                    if(project.links.live) {
+                        linksContainer.innerHTML += `
+                            <a href="${project.links.live}" target="_blank" class="flex items-center text-lg text-cyan-400 hover:text-cyan-300 group">
+                                <i class="fas fa-external-link-alt mr-3"></i> Zobacz Live Demo
+                                <i class="fas fa-arrow-right ml-auto transform group-hover:translate-x-1 transition-transform"></i>
+                            </a>`;
+                    }
+                    if(project.links.source) {
+                         linksContainer.innerHTML += `
+                            <a href="${project.links.source}" target="_blank" class="flex items-center text-lg text-slate-400 hover:text-slate-200 group mt-2">
+                                <i class="fab fa-github mr-3"></i> Kod Źródłowy
+                                <i class="fas fa-arrow-right ml-auto transform group-hover:translate-x-1 transition-transform"></i>
+                            </a>`;
+                    }
+                } else {
+                    linksContainerParent.style.display = 'none';
+                }
+
+                // Galeria projektu
+                if (project.gallery && project.gallery.length > 0) {
+                    gallerySection.style.display = 'block';
+                    galleryContainer.innerHTML = ''; // Wyczyść istniejące obrazy
+                    project.gallery.forEach((item, index) => {
+                        const div = document.createElement('div');
+                        div.setAttribute('data-aos', 'zoom-in-up');
+                        div.setAttribute('data-aos-delay', String(index * 100)); // Upewnij się, że delay jest stringiem
+                        div.innerHTML = `
+                            <a href="${item.full}" data-lightbox="project-gallery" data-title="${item.title}">
+                                <img src="${item.thumb}" alt="${item.title}" class="gallery-image w-full h-64 object-cover rounded-xl shadow-xl">
+                            </a>
+                        `;
+                        galleryContainer.appendChild(div);
+                    });
+                } else {
+                    gallerySection.style.display = 'none';
+                }
+                
+                // Wyzwania i rozwiązania
+                if (project.challenges) {
+                    challengesSection.style.display = 'block';
+                    challengesEl.innerHTML = project.challenges;
+                } else {
+                     challengesSection.style.display = 'none';
+                }
+
+            } else {
+                // Obsługa przypadku, gdy projekt nie został znaleziony
+                titleEl.textContent = "Nie znaleziono projektu";
+                subtitleEl.textContent = "Wróć do strony głównej, aby zobaczyć dostępne projekty.";
+                if(heroImageEl) heroImageEl.style.display = 'none';
+                descriptionEl.innerHTML = '<p>Przepraszamy, szczegóły tego projektu nie są obecnie dostępne.</p>';
+            }
+        }
+
+        // Uruchomienie funkcji po załadowaniu okna
+        window.addEventListener('load', function() {
+            loadProjectData(); // Załaduj dane projektu
+
+            // Inicjalizacja Lightbox2 po załadowaniu danych projektu i utworzeniu galerii
+            if (typeof lightbox !== 'undefined') { // Sprawdź, czy obiekt lightbox istnieje
+                lightbox.option({
+                  'resizeDuration': 200,
+                  'wrapAround': true,
+                  'fadeDuration': 300,
+                  'imageFadeDuration': 300,
+                  'disableScrolling': true // Zapobiega scrollowaniu strony gdy lightbox jest otwarty
+                });
+            } else {
+                console.error("Lightbox object not found. Check Lightbox2 library loading and jQuery dependency.");
+            }
+        });
+
+    </script>
+</body>
+</html>
