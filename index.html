@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filip Pira - Portfolio Profesjonalisty</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom scrollbar - dark theme */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1a202c; }
+        ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #2dd4bf; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0f172a; /* Głęboki ciemny granat/czarny jako tło */
+            color: #e2e8f0; /* Jasnoszary dla głównego tekstu (slate-200) */
+            overflow-x: hidden; /* Zapobieganie poziomemu przewijaniu - ważne dla responsywności */
+        }
+
+        /* Preloader */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #0f172a; z-index: 9999; display: flex;
+            justify-content: center; align-items: center;
+            transition: opacity 0.7s ease-out, visibility 0.7s ease-out;
+        }
+        #preloader.hidden { opacity: 0; visibility: hidden; }
+        .spinner {
+            width: 60px; height: 60px; border-radius: 50%;
+            border: 6px solid transparent;
+            border-top-color: #2dd4bf;
+            border-left-color: #2dd4bf; /* Dodatkowy border dla efektu */
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Sticky Nav - Glassmorphism */
+        #navbar {
+            transition: top 0.4s ease-in-out, background-color 0.4s ease-in-out, box-shadow 0.4s ease-in-out;
+            background-color: rgba(15, 23, 42, 0.7); /* Ciemne tło z przezroczystością (slate-900) */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        #navbar.nav-scrolled {
+             box-shadow: 0 6px 40px rgba(0, 0, 0, 0.2); /* Cień dla "przyklejonej" nawigacji */
+        }
+
+        /* Section title underline */
+        .section-title::after {
+            content: ''; display: block; width: 100px; height: 5px;
+            background: linear-gradient(90deg, #2dd4bf, #06b6d4, #38bdf8);
+            margin: 14px auto 0; border-radius: 3px;
+        }
+
+        /* Timeline */
+        .timeline-item {
+            position: relative; padding-left: 45px; margin-left: 25px; /* Responsywne marginesy */
+            padding-bottom: 2.5rem; border-left: 4px solid #2dd4bf;
+        }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -14px; top: -2px; 
+            width: 24px; height: 24px; border-radius: 50%;
+            background-color: #2dd4bf; border: 5px solid #0f172a;
+            box-shadow: 0 0 15px rgba(45, 212, 191, 0.6);
+        }
+        /* Removed .timeline-item:last-child rule to ensure all items have a line */
+
+        /* Back to top button */
+        #backToTopBtn {
+            transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+            background: linear-gradient(45deg, #2dd4bf, #06b6d4);
+            box-shadow: 0 5px 20px rgba(45, 212, 191, 0.5);
+        }
+        #backToTopBtn:hover { transform: translateY(-4px) scale(1.1); }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(90deg, #2dd4bf, #38bdf8, #818cf8);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; text-fill-color: transparent;
+        }
+        .gradient-text-hover:hover {
+             background: linear-gradient(90deg, #5eead4, #7dd3fc, #a78bfa); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text; text-fill-color: transparent;
+        }
+
+        /* Project Card */
+        .project-card {
+            background-color: rgba(30, 41, 59, 0.6); 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(51, 65, 85, 0.7); 
+            transition: transform 0.35s ease, box-shadow 0.35s ease;
+            display: flex; /* Added for consistent card height */
+            flex-direction: column; /* Added for consistent card height */
+        }
+        .project-card .p-8 { /* Added for consistent card height */
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .project-card:hover {
+            transform: translateY(-10px) scale(1.03); /* Efekt "uniesienia" karty */
+            box-shadow: 0 15px 35px rgba(45, 212, 191, 0.25);
+        }
+        .skill-tag {
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .skill-tag:hover {
+            transform: scale(1.08); /* Lekkie powiększenie tagu umiejętności */
+            box-shadow: 0 0 15px rgba(45, 212, 191, 0.4);
+        }
+
+        /* Animated background for hero */
+        #hero::before {
+            content: ""; position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(45deg, rgba(45, 212, 191, 0.05), rgba(56, 189, 248, 0.05), rgba(129, 140, 248, 0.05));
+            background-size: 400% 400%;
+            animation: gradientBG 25s ease infinite;
+            z-index: 0; opacity: 0.7;
+        }
+        @keyframes gradientBG { /* Animacja tła dla sekcji hero */
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero-content { position: relative; z-index: 1; } /* Treść hero na wierzchu animowanego tła */
+
+        /* Language proficiency bars */
+        .lang-bar-bg { background-color: #334155; }
+        .lang-bar-fill { background: linear-gradient(90deg, #2dd4bf, #38bdf8); }
+
+        /* Interest icons hover */
+        .interest-item i { transition: transform 0.3s ease, color 0.3s ease; }
+        .interest-item:hover i { transform: scale(1.2); color: #2dd4bf; }
+
+        /* Dodatkowe style dla lepszej responsywności formularza */
+        @media (max-width: 768px) {
+            #contact .grid {
+                grid-template-columns: 1fr; /* Formularz i dane kontaktowe w jednej kolumnie na mobile */
+            }
+            #contact .md\:text-left {
+                text-align: center; /* Wyśrodkowanie danych kontaktowych na mobile */
+            }
+             #contact .md\:justify-start {
+                justify-content: center; /* Wyśrodkowanie ikon społecznościowych na mobile */
+            }
+        }
+        .achievement-card {
+            background-color: rgba(30, 41, 59, 0.6); 
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(51, 65, 85, 0.7);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .achievement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(45, 212, 191, 0.2);
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="preloader"><div class="spinner"></div></div>
+
+    <nav id="navbar" class="fixed w-full top-[-100px] z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-24">
+                <div class="flex items-center">
+                    <a href="#hero" class="text-3xl font-black gradient-text gradient-text-hover transition-all duration-300">
+                        FP </a>
+                </div>
+                <div class="hidden lg:block">
+                    <div class="ml-10 flex items-baseline space-x-6">
+                        <a href="#about" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-semibold transition-colors duration-300 tracking-wider">O MNIE</a>
+                        <a href="#experience" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-semibold transition-colors duration-300 tracking-wider">DOŚWIADCZENIE</a>
+                        <a href="#achievements" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-semibold transition-colors duration-300 tracking-wider">OSIĄGNIĘCIA</a>
+                        <a href="#skills" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-semibold transition-colors duration-300 tracking-wider">UMIEJĘTNOŚCI</a>
+                        <a href="#projects" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-semibold transition-colors duration-300 tracking-wider">PROJEKTY</a>
+                        <a href="#certificates" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-semibold transition-colors duration-300 tracking-wider">CERTYFIKATY</a>
+                        <a href="#contact" class="text-gray-300 hover:text-cyan-400 px-3 py-2 rounded-md text-base font-semibold transition-colors duration-300 tracking-wider">KONTAKT</a>
+                    </div>
+                </div>
+                <div class="-mr-2 flex lg:hidden">
+                    <button type="button" id="mobileMenuButton" class="bg-slate-700/50 inline-flex items-center justify-center p-3 rounded-md text-gray-300 hover:text-cyan-400 hover:bg-slate-600/70 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500" aria-controls="mobile-menu" aria-expanded="false">
+                        <span class="sr-only">Otwórz menu</span>
+                        <i class="fas fa-bars fa-fw text-2xl"></i> </button>
+                </div>
+            </div>
+        </div>
+        <div class="lg:hidden hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-2 sm:px-3">
+                <a href="#about" class="text-gray-300 hover:text-cyan-400 hover:bg-slate-700/50 block px-4 py-3 rounded-md text-lg font-semibold transition-colors duration-300">O MNIE</a>
+                <a href="#experience" class="text-gray-300 hover:text-cyan-400 hover:bg-slate-700/50 block px-4 py-3 rounded-md text-lg font-semibold transition-colors duration-300">DOŚWIADCZENIE</a>
+                <a href="#achievements" class="text-gray-300 hover:text-cyan-400 hover:bg-slate-700/50 block px-4 py-3 rounded-md text-lg font-semibold transition-colors duration-300">OSIĄGNIĘCIA</a>
+                <a href="#skills" class="text-gray-300 hover:text-cyan-400 hover:bg-slate-700/50 block px-4 py-3 rounded-md text-lg font-semibold transition-colors duration-300">UMIEJĘTNOŚCI</a>
+                <a href="#projects" class="text-gray-300 hover:text-cyan-400 hover:bg-slate-700/50 block px-4 py-3 rounded-md text-lg font-semibold transition-colors duration-300">PROJEKTY</a>
+                <a href="#certificates" class="text-gray-300 hover:text-cyan-400 hover:bg-slate-700/50 block px-4 py-3 rounded-md text-lg font-semibold transition-colors duration-300">CERTYFIKATY</a>
+                <a href="#contact" class="text-gray-300 hover:text-cyan-400 hover:bg-slate-700/50 block px-4 py-3 rounded-md text-lg font-semibold transition-colors duration-300">KONTAKT</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <section id="hero" class="min-h-screen flex flex-col justify-center items-center text-center py-28 pt-40 md:pt-28 relative">
+            <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
+                <img src="https://placehold.co/200x200/0F172A/2DD4BF?text=FP&font=Inter&bold" alt="Zdjęcie Filip Pira" class="w-40 h-40 sm:w-48 sm:h-48 rounded-full mx-auto mb-10 border-6 border-cyan-500/70 shadow-3xl shadow-cyan-500/40">
+                <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-slate-100 mb-5">
+                    <span class="gradient-text">Filip Pira</span>
+                </h1>
+                <p id="typed-subtitle" class="text-2xl sm:text-3xl md:text-4xl text-cyan-400 font-bold mb-12 h-12 sm:h-14 md:h-16">
+                    </p>
+                <p class="max-w-3xl mx-auto text-slate-300 mb-14 text-lg sm:text-xl lg:text-2xl leading-relaxed">
+                    Doświadczony specjalista w obszarze Project Management i PMO, z pasją do analizy i optymalizacji. Odkryj moje projekty i kompetencje.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-6">
+                    <a href="#projects" class="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-white font-bold py-4 px-12 rounded-xl text-xl shadow-xl hover:shadow-2xl shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105">
+                        Moje Projekty <i class="fas fa-rocket ml-3"></i>
+                    </a>
+                    <a href="Filip Pira_CV_PL.pdf" target="_blank" class="border-2 border-cyan-500 text-cyan-400 hover:bg-cyan-500 hover:text-slate-900 font-bold py-4 px-12 rounded-xl text-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                        Pobierz CV <i class="fas fa-download ml-3"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">KILKA SŁÓW O MNIE</h2>
+            <div class="grid lg:grid-cols-5 gap-12 sm:gap-16 items-center">
+                <div class="lg:col-span-2" data-aos="fade-right" data-aos-duration="900">
+                    <img src="https://placehold.co/600x750/1E293B/38BDF8?text=Analityk&font=Inter" alt="Wizualizacja analitycznego podejścia Filipa Piry" class="rounded-2xl shadow-3xl w-full object-cover" style="max-height: 600px;">
+                </div>
+                <div class="lg:col-span-3 text-slate-300 space-y-7 text-lg lg:text-xl leading-relaxed" data-aos="fade-left" data-aos-duration="900" data-aos-delay="200">
+                    <p>Posiadam bogate doświadczenie w obszarach Project Management i PMO, z silnymi zdolnościami analitycznymi i organizacyjnymi. Szybko przyswajam nowe informacje i skutecznie stosuję techniki produktywności.</p>
+                    <p>Jestem otwarty na nowe wyzwania i dążę do osiągania najlepszych rezultatów. Moja kariera charakteryzuje się dynamicznym rozwojem, adaptacją do zmieniających się wymagań projektowych oraz skutecznym zarządzaniem zarówno krótkoterminowymi inicjatywami, jak i wsparciem w strategicznych programach.</p>
+                     <a href="#contact" class="inline-block mt-8 text-xl text-cyan-400 hover:text-cyan-300 font-semibold group transition-colors duration-300">
+                        Nawiążmy współpracę <i class="fas fa-handshake ml-2 transform group-hover:rotate-12 transition-transform"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="experience" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">HISTORIA KARIERY ZAWODOWEJ</h2>
+            <div class="space-y-20">
+                <div class="timeline-item" data-aos="fade-up" data-aos-duration="900">
+                    <div class="ml-7 p-8 bg-slate-800/60 rounded-xl shadow-2xl backdrop-filter backdrop-blur-md border border-slate-700/60">
+                        <h3 class="text-2xl sm:text-3xl font-bold text-cyan-400 mb-2">IT PM Support</h3>
+                        <p class="text-lg font-medium text-slate-400 mb-2">Vodeno | Warszawa (Zdalnie)</p>
+                        <p class="text-base text-slate-500 mb-5">Październik 2023 – Obecnie</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-3 text-base sm:text-lg">
+                            <li>Zaangażowanie w kluczowe projekty w organizacji, w tym projekty dla klientów strategicznych w obszarze BaaS, programy regulacyjne oraz naprawcze.</li>
+                            <li>Współpraca z klientami (Aion, Credex, InPost) oraz zewnętrznymi audytorami (KPMG).</li>
+                            <li>Pełnienie hybrydowych ról: Project Manager, PM Support, Business Analyst, Account Manager.</li>
+                            <li>Zarządzanie krótkoterminowymi projektami pobocznymi.</li>
+                            <li>Prowadzenie spotkań statusowych i komunikacja z zespołem projektowym oraz interesariuszami.</li>
+                            <li>Przygotowywanie prezentacji i raportów dla zarządu (komitet sterujący).</li>
+                            <li>Zbieranie wymagań, tworzenie raportów, zestawień i analiz.</li>
+                            <li>Przygotowywanie dokumentacji projektowej (Google Workspace, Developerhub, Confluence).</li>
+                            <li>Tworzenie raportów budżetowych i zarządzanie przestrzeniami dyskowymi projektów.</li>
+                            <li>Praca w metodyce Scrumban.</li>
+                            <li>Wykorzystywanie narzędzi AI do optymalizacji zadań.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="fade-up" data-aos-duration="900" data-aos-delay="150">
+                     <div class="ml-7 p-8 bg-slate-800/60 rounded-xl shadow-2xl backdrop-filter backdrop-blur-md border border-slate-700/60">
+                        <h3 class="text-2xl sm:text-3xl font-bold text-cyan-400 mb-2">Sales Analyst</h3>
+                        <p class="text-lg font-medium text-slate-400 mb-2">TargetPro | Zdalnie</p>
+                        <p class="text-base text-slate-500 mb-5">Wrzesień 2022 – Lipiec 2023</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-3 text-base sm:text-lg">
+                            <li>Przygotowywanie ogólnopolskich raportów sprzedażowych.</li>
+                            <li>Zbieranie wymagań i przygotowywanie raportów ad hoc.</li>
+                            <li>Administracja bazą danych i wykonywanie zadań ETL.</li>
+                            <li>Tworzenie automatyzacji (VBA, Power Query, Power Automate).</li>
+                            <li>Wsparcie techniczne dla przedstawicieli handlowych (obsługa aplikacji mobilnej).</li>
+                            <li>Współpraca z menadżerami sprzedaży oraz działem IT.</li>
+                            <li>Organizacja pracy własnej w filozofii Agile.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="fade-up" data-aos-duration="900" data-aos-delay="300">
+                     <div class="ml-7 p-8 bg-slate-800/60 rounded-xl shadow-2xl backdrop-filter backdrop-blur-md border border-slate-700/60">
+                        <h3 class="text-2xl sm:text-3xl font-bold text-cyan-400 mb-2">Spekulant / Trader</h3>
+                        <p class="text-lg font-medium text-slate-400 mb-2">Samozatrudniony | Zdalnie</p>
+                        <p class="text-base text-slate-500 mb-5">Maj 2021 – Wrzesień 2022</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-3 text-base sm:text-lg">
+                            <li>Transakcje na rynku finansowym (spot, futures, CFD).</li>
+                            <li>Stosowanie analizy fundamentalnej, sentymentu, on-chain oraz technicznej.</li>
+                            <li>Przygotowywanie scenariuszy, zarządzanie kapitałem i ryzykiem.</li>
+                            <li>Korzystanie ze środowiska De-Fi i stosowanie wiedzy ekonomicznej.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item" data-aos="fade-up" data-aos-duration="900" data-aos-delay="450">
+                     <div class="ml-7 p-8 bg-slate-800/60 rounded-xl shadow-2xl backdrop-filter backdrop-blur-md border border-slate-700/60">
+                        <h3 class="text-2xl sm:text-3xl font-bold text-cyan-400 mb-2">Quality Assurance Analyst</h3>
+                        <p class="text-lg font-medium text-slate-400 mb-2">Gabi Personal Insurance Agency (Startup technologiczny) | Łódź</p>
+                        <p class="text-base text-slate-500 mb-5">Kwiecień 2018 – Maj 2021</p>
+                        <ul class="list-disc list-inside text-slate-300 space-y-3 text-base sm:text-lg">
+                            <li>Praca na elastycznym stanowisku (Analityk biznesowo-systemowy, Team Leader, Product Manager, Tester, Operation Specialist).</li>
+                            <li>Budowa i rozwój procesu szkoleniowego i operacyjnego, tworzenie i zarządzanie dokumentacją.</li>
+                            <li>Zbieranie wymagań biznesowych i systemowych, rekomendowanie i wdrażanie rozwiązań.</li>
+                            <li>Przygotowanie instrukcji, wytycznych, procedur, procesów, modeli.</li>
+                            <li>Przeprowadzanie szkoleń, wdrożeń, warsztatów, certyfikacji.</li>
+                            <li>Zarządzanie nowymi zespołami podczas onboardingu.</li>
+                            <li>Audyt jakości pracy zespołów operacyjnych.</li>
+                            <li>Praca z wykorzystaniem metodyk zwinnych i samodzielna organizacja pracy.</li>
+                            <li>Organizacja wydarzeń i aktywności dla pracowników.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="achievements" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">OSIĄGNIĘCIA ZAWODOWE</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="achievement-card p-8 rounded-xl" data-aos="fade-up" data-aos-delay="0">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-3">Gabi Inc. (2018)</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">Dołączenie do startupu z Doliny Krzemowej. Przygotowanie i przeprowadzenie programu szkoleniowego dla pierwszych 20 pracowników oddziału Gabi Polska.</p>
+                </div>
+                <div class="achievement-card p-8 rounded-xl" data-aos="fade-up" data-aos-delay="100">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-3">Gabi Polska (2019-2020)</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">Udział w rozwoju polskiego zespołu operacyjnego z 20 do 200 pracowników. Zbudowanie procesu szkoleniowego (certyfikacje, instrukcje, procedury). Przeprowadzenie ok. 100 szkoleń wdrożeniowych.</p>
+                </div>
+                <div class="achievement-card p-8 rounded-xl" data-aos="fade-up" data-aos-delay="200">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-3">Gabi Polska (2020-2021)</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">Praca nad rozwojem wewnętrznego systemu szkoleniowego i audytowego. Reorganizacja podejścia szkoleniowego na 100% zdalnie.</p>
+                </div>
+                <div class="achievement-card p-8 rounded-xl" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-3">Trader (2021-2022)</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">Rozwój w dziedzinie zarządzania ryzykiem, samodyscypliny, zdolności analitycznych, decyzyjności, kontrolowania emocji i stresu.</p>
+                </div>
+                <div class="achievement-card p-8 rounded-xl" data-aos="fade-up" data-aos-delay="400">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-3">Sales Analyst (2022-2023)</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">Optymalizacja i automatyzacja raportowania dla ogólnopolskich menadżerów sprzedaży - skrócenie czasu przygotowywania raportów o 90%. Rozwój zawodowy i zdobycie certyfikatów ECBA i PSM, opanowanie podstaw SQL i Pythona.</p>
+                </div>
+                <div class="achievement-card p-8 rounded-xl" data-aos="fade-up" data-aos-delay="500">
+                    <h3 class="text-xl font-bold text-cyan-400 mb-3">Vodeno (2023-2024)</h3>
+                    <p class="text-slate-300 text-lg leading-relaxed">Zwiększenie zakresu odpowiedzialności z Account Managera do PM Support. Praca bezpośrednio z Project Management Lead oraz Head of Delivery przy strategicznych projektach. Poprowadzenie z sukcesem dwóch krótkoterminowych projektów w roli PM.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">UMIEJĘTNOŚCI KLUCZOWE</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="bg-slate-800/60 p-8 rounded-2xl shadow-3xl backdrop-filter backdrop-blur-md border border-slate-700/60" data-aos="fade-up" data-aos-duration="800" data-aos-delay="50">
+                    <h3 class="text-2xl lg:text-3xl font-bold text-cyan-400 mb-8 flex items-center"><i class="fas fa-cogs fa-fw mr-4 text-4xl"></i> Techniczne & Analityczne</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <span class="skill-tag bg-cyan-600/40 text-cyan-200 px-5 py-2.5 rounded-lg text-base font-semibold">Microsoft Excel (zaawansowany)</span>
+                        <span class="skill-tag bg-cyan-600/40 text-cyan-200 px-5 py-2.5 rounded-lg text-base font-semibold">Język zapytań SQL (średniozaawansowany)</span>
+                        <span class="skill-tag bg-cyan-600/40 text-cyan-200 px-5 py-2.5 rounded-lg text-base font-semibold">Power Query, Power Automate</span>
+                        <span class="skill-tag bg-cyan-600/40 text-cyan-200 px-5 py-2.5 rounded-lg text-base font-semibold">VBA (podstawy)</span>
+                        <span class="skill-tag bg-cyan-600/40 text-cyan-200 px-5 py-2.5 rounded-lg text-base font-semibold">Język programowania Python (podstawowy)</span>
+                        <span class="skill-tag bg-cyan-600/40 text-cyan-200 px-5 py-2.5 rounded-lg text-base font-semibold">UML i BPMN (podstawowy)</span>
+                        <span class="skill-tag bg-cyan-600/40 text-cyan-200 px-5 py-2.5 rounded-lg text-base font-semibold">Analiza danych, ETL</span>
+                    </div>
+                </div>
+                <div class="bg-slate-800/60 p-8 rounded-2xl shadow-3xl backdrop-filter backdrop-blur-md border border-slate-700/60" data-aos="fade-up" data-aos-duration="800" data-aos-delay="150">
+                    <h3 class="text-2xl lg:text-3xl font-bold text-teal-400 mb-8 flex items-center"><i class="fas fa-users fa-fw mr-4 text-4xl"></i> Zarządcze & Miękkie</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Zarządzanie projektami (PM Support, PM)</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Zbieranie wymagań biznesowych</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Rekomendowanie rozwiązań</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Modelowanie i optymalizowanie procesów</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Tworzenie instrukcji i dokumentacji</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Myślenie systemowe i analityczne</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Prowadzenie szkoleń i warsztatów</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Zarządzanie zespołem</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Komunikacja z interesariuszami</span>
+                        <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Metodyki zwinne (Scrumban, Agile)</span>
+                         <span class="skill-tag bg-teal-600/40 text-teal-200 px-5 py-2.5 rounded-lg text-base font-semibold">Produktywność i organizacja pracy</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-16 bg-slate-800/60 p-8 rounded-2xl shadow-3xl backdrop-filter backdrop-blur-md border border-slate-700/60" data-aos="fade-up" data-aos-duration="800" data-aos-delay="250">
+                <h3 class="text-2xl lg:text-3xl font-bold text-sky-400 mb-8 flex items-center"><i class="fas fa-tools fa-fw mr-4 text-4xl"></i> Programy i Narzędzia</h3>
+                <div class="flex flex-wrap gap-4">
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">Windows, MacOS</span>
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">MS Office (Excel, Power Query), Google Workspace</span>
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">Jira, Confluence, Developerhub, Document360</span>
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">Canva</span>
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">MerchMobiler, systemy ubezpieczeniowe w USA</span>
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">Komunikatory: Google Chat, Teams, Slack, WhatsApp, Telegram, Discord</span>
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">MySQL, PostgreSQL</span>
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">Replit, Pycharm, MS VBA</span>
+                    <span class="skill-tag bg-sky-600/40 text-sky-200 px-5 py-2.5 rounded-lg text-base font-semibold">Narzędzia AI</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">WYBRANE PROJEKTY I ZAANGAŻOWANIA</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 sm:gap-16">
+                <div class="project-card rounded-2xl overflow-hidden" data-aos="fade-up-right" data-aos-duration="900">
+                    <img src="https://placehold.co/600x400/0F172A/2DD4BF?text=Vodeno+BaaS&font=Inter&bold" alt="Projekt BaaS w Vodeno" class="w-full h-72 object-cover">
+                    <div class="p-8">
+                        <div>
+                            <h3 class="text-2xl sm:text-3xl font-bold text-cyan-400 mb-4">Projekty BaaS i Regulacyjne (Vodeno)</h3>
+                            <p class="text-slate-400 text-base sm:text-lg mb-7 leading-relaxed">Wsparcie kluczowych projektów dla strategicznych klientów (Aion, Credex, InPost) w obszarze Banking as a Service, a także programów regulacyjnych i naprawczych. Praca w hybrydowych rolach (PM, PMO, BA).</p>
+                            <div class="mb-7 flex flex-wrap gap-3">
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-cyan-200 bg-cyan-700/60">BaaS</span>
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-teal-200 bg-teal-700/60">FinTech</span>
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-sky-200 bg-sky-700/60">Regulacje</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto flex items-center justify-between">
+                            <a href="projekt-detale.html?id=vodeno-baas" class="text-lg text-cyan-400 hover:text-cyan-300 font-semibold group transition-colors duration-300">
+                                Dowiedz się więcej <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card rounded-2xl overflow-hidden" data-aos="fade-up-left" data-aos-duration="900" data-aos-delay="150">
+                    <img src="https://placehold.co/600x400/0F172A/67E8F9?text=TargetPro+Raporty&font=Inter&bold" alt="Automatyzacja raportów w TargetPro" class="w-full h-72 object-cover">
+                    <div class="p-8">
+                        <div>
+                            <h3 class="text-2xl sm:text-3xl font-bold text-teal-400 mb-4">Automatyzacja Raportowania (TargetPro)</h3>
+                            <p class="text-slate-400 text-base sm:text-lg mb-7 leading-relaxed">Optymalizacja i automatyzacja procesów raportowania sprzedaży dla menadżerów ogólnopolskich, co znacząco skróciło czas przygotowywania raportów (o 90%) przy użyciu VBA, Power Query i Power Automate.</p>
+                             <div class="mb-7 flex flex-wrap gap-3">
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-cyan-200 bg-cyan-700/60">Automatyzacja</span>
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-teal-200 bg-teal-700/60">Analiza Sprzedaży</span>
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-sky-200 bg-sky-700/60">ETL</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto flex items-center justify-between">
+                             <a href="projekt-detale.html?id=targetpro-raporty" class="text-lg text-teal-400 hover:text-teal-300 font-semibold group transition-colors duration-300">
+                                Dowiedz się więcej <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                 <div class="project-card rounded-2xl overflow-hidden" data-aos="fade-up-right" data-aos-duration="900" data-aos-delay="300">
+                    <img src="https://placehold.co/600x400/0F172A/818CF8?text=Gabi+Szkolenia&font=Inter&bold" alt="Procesy szkoleniowe w Gabi Polska" class="w-full h-72 object-cover">
+                    <div class="p-8">
+                        <div>
+                            <h3 class="text-2xl sm:text-3xl font-bold text-sky-400 mb-4">Rozwój Procesów Szkoleniowych (Gabi)</h3>
+                            <p class="text-slate-400 text-base sm:text-lg mb-7 leading-relaxed">Budowa i rozwój kompleksowego procesu szkoleniowego i operacyjnego w startupie Gabi Polska, obejmującego tworzenie dokumentacji, przeprowadzanie szkoleń, certyfikacji i audytów jakości dla zespołu rosnącego od 20 do 200 osób.</p>
+                             <div class="mb-7 flex flex-wrap gap-3">
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-cyan-200 bg-cyan-700/60">Szkolenia</span>
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-teal-200 bg-teal-700/60">Rozwój Zespołu</span>
+                                <span class="text-sm font-semibold inline-block py-2 px-4 uppercase rounded-lg text-sky-200 bg-sky-700/60">Startup</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto flex items-center justify-between">
+                             <a href="projekt-detale.html?id=gabi-szkolenia" class="text-lg text-sky-400 hover:text-sky-300 font-semibold group transition-colors duration-300">
+                                Dowiedz się więcej <i class="fas fa-arrow-right ml-2 transform group-hover:translate-x-1 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card rounded-2xl overflow-hidden" data-aos="fade-up-left" data-aos-duration="900" data-aos-delay="450">
+                    <div class="p-8">
+                        <div class="flex flex-col items-center justify-center text-center h-full">
+                            <i class="fas fa-plus-circle text-6xl text-slate-500 mb-4"></i>
+                            <h3 class="text-2xl sm:text-3xl font-bold text-slate-400 mb-2">Kolejny Projekt</h3>
+                            <p class="text-slate-500 text-base sm:text-lg leading-relaxed">Wkrótce więcej informacji na temat tego projektu.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="certificates" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">CERTYFIKATY I KURSY</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div class="achievement-card p-8 rounded-xl" data-aos="fade-up" data-aos-delay="0">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-award text-5xl text-cyan-400 mr-6"></i>
+                        <div>
+                            <h3 class="text-2xl font-bold text-cyan-400">ECBA: Entry Certificate in Business Analysis</h3>
+                            <p class="text-slate-400 text-lg">IIBA (International Institute of Business Analysis)</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300 text-lg leading-relaxed mb-4">Potwierdzenie podstawowej wiedzy i umiejętności w zakresie analizy biznesowej.</p>
+                    <a href="certyfikaty-detale.html#ecba" class="text-cyan-400 hover:text-cyan-300 font-semibold group transition-colors">Zobacz szczegóły <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform"></i></a>
+                </div>
+                <div class="achievement-card p-8 rounded-xl" data-aos="fade-up" data-aos-delay="100">
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-scroll text-5xl text-teal-400 mr-6"></i>
+                        <div>
+                            <h3 class="text-2xl font-bold text-teal-400">PSM I: Professional Scrum Master I</h3>
+                            <p class="text-slate-400 text-lg">Scrum.org</p>
+                        </div>
+                    </div>
+                    <p class="text-slate-300 text-lg leading-relaxed mb-4">Demonstracja fundamentalnego poziomu mistrzostwa Scrum, w tym koncepcji stosowania Scrum.</p>
+                     <a href="certyfikaty-detale.html#psm" class="text-teal-400 hover:text-teal-300 font-semibold group transition-colors">Zobacz szczegóły <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform"></i></a>
+                </div>
+                <div class="achievement-card p-8 rounded-xl md:col-span-2" data-aos="fade-up" data-aos-delay="200">
+                     <div class="flex items-center mb-4">
+                        <i class="fas fa-graduation-cap text-5xl text-sky-400 mr-6"></i>
+                        <div>
+                            <h3 class="text-2xl font-bold text-sky-400">Dodatkowe Kursy i Szkolenia</h3>
+                        </div>
+                    </div>
+                    <ul class="list-disc list-inside text-slate-300 space-y-2 text-lg">
+                        <li>Kurs analizy biznesowej od Analizait.pl</li>
+                        <li>UML I BPMN - Udemy</li>
+                        <li>Język zapytań SQL - Udemy</li>
+                        <li>Środowiska MySQL i PostgreSQL - Udemy</li>
+                        <li>Microsoft Excel, VBA, Power Query - Udemy</li>
+                        <li>Cloud Digital Leader - Google</li>
+                    </ul>
+                     <a href="certyfikaty-detale.html#kursy" class="mt-4 inline-block text-sky-400 hover:text-sky-300 font-semibold group transition-colors">Zobacz więcej <i class="fas fa-arrow-right ml-1 transform group-hover:translate-x-1 transition-transform"></i></a>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="languages" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">JĘZYKI OBCE</h2>
+            <div class="max-w-3xl mx-auto space-y-10">
+                <div data-aos="fade-right" data-aos-duration="800">
+                    <div class="flex justify-between mb-1">
+                        <span class="text-xl font-semibold text-cyan-400">Angielski</span>
+                        <span class="text-lg font-medium text-slate-300">B2/C1</span>
+                    </div>
+                    <div class="w-full lang-bar-bg rounded-full h-5 shadow-inner">
+                        <div class="lang-bar-fill h-5 rounded-full shadow-md" style="width: 85%" data-aos="slide-right" data-aos-duration="1500" data-aos-delay="200"></div>
+                    </div>
+                </div>
+                </div>
+        </section>
+
+        <section id="interests" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">ZAINTERESOWANIA</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-8 text-center">
+                <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700">
+                    <i class="fas fa-chart-line text-6xl text-cyan-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Inwestycje</h4>
+                </div>
+                <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="50">
+                    <i class="fas fa-coins text-6xl text-yellow-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Ekonomia</h4>
+                </div>
+                <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="100">
+                    <i class="fab fa-bitcoin text-6xl text-orange-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Kryptowaluty</h4>
+                </div>
+                <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="150">
+                    <i class="fas fa-project-diagram text-6xl text-teal-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Zarządzanie</h4>
+                </div>
+                 <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="200">
+                    <i class="fas fa-database text-6xl text-sky-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Analiza Danych</h4>
+                </div>
+                <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="250">
+                    <i class="fas fa-flag-checkered text-6xl text-red-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Formuła 1</h4>
+                </div>
+                <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="300">
+                    <i class="fas fa-football-ball text-6xl text-amber-700 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Futbol Amerykański</h4>
+                </div>
+                 <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="350">
+                    <i class="fas fa-biking text-6xl text-green-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Kolarstwo Górskie</h4>
+                </div>
+                <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="400">
+                    <i class="fas fa-dumbbell text-6xl text-blue-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Trening Atletyczny</h4>
+                </div>
+                <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="450">
+                    <i class="fas fa-puzzle-piece text-6xl text-purple-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Gry Planszowe</h4>
+                </div>
+                 <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="500">
+                    <i class="fas fa-headset text-6xl text-pink-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Simracing</h4>
+                </div>
+                 <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="550">
+                    <i class="fas fa-user-graduate text-6xl text-lime-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Rozwój Osobisty</h4>
+                </div>
+                 <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="600">
+                    <i class="fas fa-brain text-6xl text-fuchsia-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Psychologia</h4>
+                </div>
+                 <div class="interest-item bg-slate-800/50 p-6 rounded-xl shadow-xl border border-slate-700/50" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="650">
+                    <i class="fas fa-mobile-alt text-6xl text-rose-500 mb-4"></i>
+                    <h4 class="text-xl font-semibold text-slate-200">Nowinki Technologiczne</h4>
+                </div>
+            </div>
+        </section>
+        
+        <section id="education" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">WYKSZTAŁCENIE</h2>
+            <div class="space-y-12">
+                <div class="bg-slate-800/60 p-10 rounded-2xl shadow-2xl backdrop-filter backdrop-blur-md border border-slate-700/60" data-aos="fade-left" data-aos-duration="800">
+                    <h3 class="text-2xl sm:text-3xl font-bold text-cyan-400">Inżynier Budownictwa Lądowego</h3>
+                    <p class="text-xl font-medium text-slate-400 mt-1">Politechnika Łódzka, Wydział Budownictwa</p>
+                    <p class="mt-4 text-slate-300 text-lg">Ukończone studia inżynierskie na kierunku Budownictwo.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 sm:py-36">
+            <h2 class="section-title text-4xl sm:text-5xl font-bold text-center mb-20 sm:mb-24 text-slate-100" data-aos="fade-up">POROZMAWIAJMY</h2>
+            <div class="bg-slate-800/50 p-8 sm:p-12 lg:p-16 rounded-3xl shadow-3xl max-w-4xl mx-auto backdrop-filter backdrop-blur-lg border border-slate-700/50" data-aos="zoom-in-up" data-aos-duration="1000">
+                <p class="text-center text-slate-300 mb-10 text-xl sm:text-2xl leading-relaxed">
+                    Masz pomysł na projekt, pytanie, a może po prostu chcesz się przywitać? Jestem otwarty na nowe możliwości i chętnie nawiążę kontakt!
+                </p>
+                <div class="grid md:grid-cols-2 gap-10 items-start">
+                    <div class="text-center md:text-left">
+                        <h3 class="text-3xl font-bold text-cyan-400 mb-6">Dane kontaktowe:</h3>
+                        <p class="text-xl text-slate-300 mb-3 flex items-center justify-center md:justify-start">
+                            <i class="fas fa-envelope fa-fw mr-3 text-cyan-500 text-2xl"></i>
+                            <a href="mailto:pira.filip93@gmail.com" class="hover:text-cyan-400 transition-colors">pira.filip93@gmail.com</a>
+                        </p>
+                        <p class="text-xl text-slate-300 mb-6 flex items-center justify-center md:justify-start">
+                            <i class="fas fa-phone-alt fa-fw mr-3 text-cyan-500 text-2xl"></i>
+                            <a href="tel:+48505205155" class="hover:text-cyan-400 transition-colors">+48 505 205 155</a>
+                        </p>
+                        <h4 class="text-2xl font-semibold text-teal-400 mt-8 mb-4">Znajdź mnie online:</h4>
+                        <div class="flex justify-center md:justify-start space-x-6">
+                            <a href="https://linkedin.com/in/filip-pira" target="_blank" class="text-slate-400 hover:text-cyan-400 transition-colors text-4xl transform hover:scale-110"><i class="fab fa-linkedin"></i></a>
+                            </div>
+                    </div>
+                    <div class="mt-10 md:mt-0">
+                        <h3 class="text-3xl font-bold text-cyan-400 mb-6 text-center">Lub wyślij szybką wiadomość:</h3>
+                        <form action="YOUR_FORMSPREE_ACTION_URL" method="POST">
+                            <input type="hidden" name="_subject" value="Nowa wiadomość z Portfolio CV od Filipa Piry">
+                            <input type="hidden" name="_next" value="formularz-potwierdzenie.html"> <div class="mb-5">
+                                <label for="name" class="block mb-2 text-lg font-medium text-slate-300">Imię i Nazwisko</label>
+                                <input type="text" id="name" name="name" class="bg-slate-700/50 border border-slate-600 text-slate-200 text-lg rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3.5 placeholder-slate-400" placeholder="Jan Kowalski" required>
+                            </div>
+                            <div class="mb-5">
+                                <label for="email" class="block mb-2 text-lg font-medium text-slate-300">Adres Email</label>
+                                <input type="email" id="email" name="email" class="bg-slate-700/50 border border-slate-600 text-slate-200 text-lg rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3.5 placeholder-slate-400" placeholder="jan.kowalski@example.com" required>
+                            </div>
+                            <div class="mb-7">
+                                <label for="message" class="block mb-2 text-lg font-medium text-slate-300">Wiadomość</label>
+                                <textarea id="message" name="message" rows="5" class="bg-slate-700/50 border border-slate-600 text-slate-200 text-lg rounded-lg focus:ring-cyan-500 focus:border-cyan-500 block w-full p-3.5 placeholder-slate-400" placeholder="Twoja wiadomość..." required></textarea>
+                            </div>
+                            <button type="submit" class="w-full text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-bold rounded-lg text-xl px-8 py-4 text-center transition-all duration-300 transform hover:scale-105">
+                                Wyślij <i class="fas fa-paper-plane ml-2"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div> <footer class="text-center py-16 bg-slate-900 text-slate-500 mt-24 sm:mt-36 border-t-2 border-slate-700/50">
+        <div class="mb-6">
+            <a href="mailto:pira.filip93@gmail.com" class="hover:text-cyan-400 transition-colors text-lg">pira.filip93@gmail.com</a>
+            <span class="mx-3">|</span>
+            <a href="tel:+48505205155" class="hover:text-cyan-400 transition-colors text-lg">+48 505 205 155</a>
+        </div>
+        <div class="flex justify-center space-x-6 mb-8">
+            <a href="https://linkedin.com/in/filip-pira" target="_blank" class="text-slate-500 hover:text-cyan-400 transition-colors text-3xl"><i class="fab fa-linkedin"></i></a>
+            </div>
+        <p class="mb-2 text-base">&copy; <span id="currentYear"></span> Filip Pira. Wszelkie prawa zastrzeżone.</p>
+        <p class="text-sm">Zaprojektowano z <i class="fas fa-heart text-red-500"></i> i <i class="fas fa-coffee text-yellow-600"></i> w Polsce.</p>
+    </footer>
+
+    <button id="backToTopBtn" title="Wróć na górę" class="fixed bottom-8 right-8 text-white p-5 rounded-full shadow-3xl opacity-0 invisible transition-all duration-300 z-40 text-2xl">
+        <i class="fas fa-chevron-up"></i>
+    </button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+
+    <script>
+        // Inicjalizacja AOS (Animate On Scroll)
+        AOS.init({ duration: 900, once: true, offset: 80 });
+
+        // Ukrywanie preleadera po załadowaniu strony
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => { preloader.classList.add('hidden'); }, 400);
+        });
+
+        // Inicjalizacja Typed.js dla efektu pisania
+        if (document.getElementById('typed-subtitle')) {
+            new Typed('#typed-subtitle', {
+                strings: ['Project Management Support', 'Analityk Biznesowy', 'Specjalista PMO', 'Gotowy na Nowe Wyzwania!'],
+                typeSpeed: 65, backSpeed: 35, loop: true, backDelay: 2200,
+                smartBackspace: true, showCursor: true, cursorChar: '|',
+            });
+        }
+
+        // Dynamiczne wstawianie aktualnego roku w stopce
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // Logika dla przyklejonej nawigacji
+        const navbar = document.getElementById('navbar');
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+            let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            if (scrollTop > 100) {
+                navbar.classList.add('nav-scrolled');
+                if (scrollTop > lastScrollTop && scrollTop > 250) {
+                    navbar.style.top = '-150px'; 
+                } else {
+                    navbar.style.top = '0';
+                }
+            } else {
+                 navbar.style.top = '0';
+                 navbar.classList.remove('nav-scrolled');
+            }
+            lastScrollTop = scrollTop <= 0 ? 0 : scrollTop;
+        });
+        
+        // Logika dla menu mobilnego
+        const mobileMenuButton = document.getElementById('mobileMenuButton');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuIcon = mobileMenuButton.querySelector('i');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', () => {
+                const expanded = mobileMenuButton.getAttribute('aria-expanded') === 'true' || false;
+                mobileMenuButton.setAttribute('aria-expanded', !expanded);
+                mobileMenu.classList.toggle('hidden');
+                mobileMenuIcon.classList.toggle('fa-bars');
+                mobileMenuIcon.classList.toggle('fa-times');
+            });
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenuButton.setAttribute('aria-expanded', 'false');
+                    mobileMenu.classList.add('hidden');
+                    mobileMenuIcon.classList.remove('fa-times');
+                    mobileMenuIcon.classList.add('fa-bars');
+                });
+            });
+        }
+
+        // Logika dla przycisku "Wróć na górę"
+        const backToTopBtn = document.getElementById('backToTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 500) {
+                backToTopBtn.classList.remove('opacity-0', 'invisible');
+                backToTopBtn.classList.add('opacity-100', 'visible');
+            } else {
+                backToTopBtn.classList.remove('opacity-100', 'visible');
+                backToTopBtn.classList.add('opacity-0', 'invisible');
+            }
+        });
+        backToTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+        // Dodatkowe style CSS wstrzykiwane przez JS
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = `
+            @keyframes pulse-slow {
+                0%, 100% { opacity: 0.3; transform: scale(0.95); }
+                50% { opacity: 0.6; transform: scale(1.05); }
+            }
+            .animate-pulse-slow { animation: pulse-slow 7s infinite ease-in-out; }
+            .shadow-3xl { box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.3), 0 18px 36px -18px rgba(0, 0, 0, 0.33); }
+            .shadow-cyan-500\\/40 { box-shadow: 0 0 30px 5px rgba(6, 182, 212, 0.4); }
+        `;
+        document.head.appendChild(styleSheet);
+    </script>
+</body>
+</html>
